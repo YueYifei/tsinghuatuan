@@ -21,4 +21,7 @@ def s_reverse_help():
 def s_reverse_activity_menu(actid):
     return SITE_DOMAIN + reverse('userpage.views.activity_menu_view', kwargs={'actid': actid})
 
+def s_reverse_choose_region(uid, eventKey):
+    return SITE_DOMAIN + reverse('userpage.views.choose_region_view', kwargs={'uid': uid, 'eventKey': eventKey, 'actid': eventKey[14]})
+
 

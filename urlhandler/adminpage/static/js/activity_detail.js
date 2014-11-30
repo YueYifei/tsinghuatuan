@@ -458,6 +458,7 @@ function submitComplete(xhr) {
 
 
 function publishActivity() {
+    alert("!!!!!!")
     if(!$('#activity-form')[0].checkValidity || $('#activity-form')[0].checkValidity()){
         if(!checktime())
             return false;

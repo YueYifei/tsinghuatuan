@@ -1,9 +1,15 @@
 #-*- coding:utf-8 -*-
 
+import random
+import string
+from urlhandler.models import *
+from queryhandler.settings import QRCODE_URL
+from django.db.models import F
+from django.db import transaction
+
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from urlhandler.models import User, Activity, Ticket
 from urlhandler.settings import STATIC_URL
 import urllib, urllib2
 import datetime
@@ -35,7 +41,7 @@ def validate_view(request, openid):
 # Validate Format:
 # METHOD 1: learn.tsinghua
 # url: https://learn.tsinghua.edu.cn/MultiLanguage/lesson/teacher/loginteacher.jsp
-# form: { userid:2011013236, userpass:***, submit1: 登录 }
+# form: { userid:2011013236, userpass:***, submit1: Ã§â„¢Â»Ã¥Â½â€?}
 # success: check substring 'loginteacher_action.jsp'
 # validate: userid is number
 def validate_through_learn(userid, userpass):
@@ -94,7 +100,81 @@ def validate_post(request):
             except:
                 return HttpResponse('Error')
     return HttpResponse(validate_result)
+  
+	
+def choose_region_post(request):
+    with transaction.atomic():
+        openid = request.POST['openid']
+        actid = request.POST['actid']
+        seat = request.POST['seat']
 
+        user = User.objects.filter(weixin_id=openid)[0]
+        activities = Activity.objects.select_for_update().filter(status=1,  id=actid)
+
+        if not activities.exists():
+            return HttpResponse('actNotExist')			#活动不存在
+        else:
+            activity = activities[0]
+	    
+        if (seat != 'A') and (seat != 'B') and (seat != 'C') and (seat != 'D'):
+            tickets = Ticket.objects.select_for_update().filter(stu_id=user.stu_id, activity=activity)
+            if (not tickets.exists()) or (tickets[0].status != 1):
+                return HttpResponse('TicketNotExist')       #票不存在
+
+            tem_seat = int(seat) 
+            ticket = tickets[0]
+            ticket.seatId = tem_seat
+            ticket.save()
+            return HttpResponse('OK')
+
+        else:
+            if seat == 'A':
+                if activity.remain_tickets_A <= 0:
+                    return HttpResponse('NoTicket')				#A区没有余票
+            if seat == 'B':
+                if activity.remain_tickets_B <= 0:
+                    return HttpResponse('NoTicket')				#A区没有余票
+            if seat == 'C':
+                if activity.remain_tickets_C <= 0:
+                    return HttpResponse('NoTicket')				#A区没有余票
+            if seat == 'D':
+                if activity.remain_tickets_D <= 0:
+                    return HttpResponse('NoTicket')				#A区没有余票
+    			
+            random_string = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
+            while Ticket.objects.filter(unique_id=random_string).exists():
+                random_string = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
+        
+            tickets = Ticket.objects.select_for_update().filter(stu_id=user.stu_id, activity=activity)
+            if tickets.exists() and tickets[0].status != 0:
+                return HttpResponse('Error')				#
+    	    		
+            next_seat = seat
+            st =  'remain_tickets'+ '_' + seat
+            if not tickets.exists():
+               Activity.objects.filter(id=activity.id).update(remain_tickets=F(st)-1)
+               ticket = Ticket.objects.create(
+                      stu_id=user.stu_id,
+                      activity_id=activity.id,
+                      unique_id=random_string,
+                      status=1,
+                      area=next_seat,
+                      seatId = -1,
+                      type = 2
+               )
+               return HttpResponse('OK1')			
+            elif tickets[0].status == 0:
+                Activity.objects.filter(id=activity.id).update(remain_tickets=F(st)-1)
+                ticket = tickets[0]
+                ticket.status = 1
+                ticket.area = next_seat
+                ticket.save()
+                return HttpResponse('OK1')
+            else:
+                return HttpResponse('TicketBooked')		 #该用户已经定过此票
+	
+
+	
 ###################### Activity Detail ######################
 
 def details_view(request, activityid):
@@ -153,7 +233,7 @@ def ticket_view(request, uid):
     now = datetime.datetime.now()
     if act_endtime < now:#表示活动已经结束
         ticket_status = 3
-    ticket_seat = ticket[0].seat
+    ticket_seat = ticket[0].area 
     act_photo = "http://qr.ssast.org/fit/"+uid
     variables=RequestContext(request,{'act_id':act_id, 'act_name':act_name,'act_place':act_place, 'act_begintime':act_begintime,
                                       'act_endtime':act_endtime,'act_photo':act_photo, 'ticket_status':ticket_status,
@@ -181,3 +261,16 @@ def helpclub_view(request):
 def helplecture_view(request):
     variables=RequestContext(request,{})
     return render_to_response('help_lecture.html', variables)
+
+
+def choose_region_view(request, uid, eventKey, actid):
+    #if User.objects.filter(weixin_id=openid, status=1).exists():
+    #    isValidated = 1
+    #else:
+    #    isValidated = 0
+    return render_to_response('choose_region.html', {
+        'uid': uid,
+        'eventKey': eventKey,
+		'actid': actid,
+        'now': datetime.datetime.now() + datetime.timedelta(seconds=-5),
+    }, context_instance=RequestContext(request))

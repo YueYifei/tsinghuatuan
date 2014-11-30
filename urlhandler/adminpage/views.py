@@ -170,12 +170,16 @@ def str_to_datetime(strg):
 
 def activity_create(activity):
     preDict = dict()
-    for k in ['name', 'key', 'description', 'place', 'pic_url', 'seat_status', 'total_tickets']:
+    for k in ['name', 'key', 'description', 'place', 'pic_url', 'seat_status', 'total_tickets','total_tickets_A', 'total_tickets_B',  'total_tickets_C', 'total_tickets_D']:
         preDict[k] = activity[k]
     for k in ['start_time', 'end_time', 'book_start', 'book_end']:
         preDict[k] = str_to_datetime(activity[k])
     preDict['status'] = 1 if ('publish' in activity) else 0
     preDict['remain_tickets'] = preDict['total_tickets']
+    preDict['remain_tickets_A'] = preDict['total_tickets_A']
+    preDict['remain_tickets_B'] = preDict['total_tickets_B']
+    preDict['remain_tickets_C'] = preDict['total_tickets_C']
+    preDict['remain_tickets_D'] = preDict['total_tickets_D']
     newact = Activity.objects.create(**preDict)
     return newact
 

@@ -50,6 +50,10 @@
                 'minute': {{ activity.book_end.minute }}
             },
             'total_tickets': {{ activity.total_tickets }},
+            'total_tickets_A': {{ activity.total_tickets_A }},
+            'total_tickets_B': {{ activity.total_tickets_B }},
+            'total_tickets_C': {{ activity.total_tickets_C }},
+            'total_tickets_D': {{ activity.total_tickets_D }},
             'status': {{ activity.status }}{% else %},
             'status': 0{% endif %}{% if activity.tickets_ready %},
             'checked_tickets': {{ activity.checked_tickets }},
@@ -313,11 +317,40 @@
                     <select name="seat_status" id="input-seat_status" class="form-control" required>
                         <option value="0">不分配座位</option>
                         <option value="1">综体：分配B、C两入口</option>
+                        <option value="2">新清华学堂：分A,B,C,D四区</option>
                     </select>
                 </div>
             </div>
 
-                <div class="form-group">
+            <div>
+            新清华学堂活动需要填写以下数据：
+            </div>
+
+            <div class="form-group">
+                <label for="input-total_tickets_A" class="col-sm-2 control-label">A区票数</label>
+                <div class="col-sm-10">
+                    <input type="number" name="total_tickets_A" class="form-control" id="input-total_tickets_A" min="0" placeholder="A区发票总数，若A区不发票可填0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input-total_tickets_B" class="col-sm-2 control-label">B区票数</label>
+                <div class="col-sm-10">
+                    <input type="number" name="total_tickets_B" class="form-control" id="input-total_tickets_B" min="0" placeholder="B区发票总数，若B区不发票可填0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input-total_tickets_C" class="col-sm-2 control-label">C区票数</label>
+                <div class="col-sm-10">
+                    <input type="number" name="total_tickets_C" class="form-control" id="input-total_tickets_C" min="0" placeholder="C区发票总数，若C区不发票可填0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input-total_tickets_D" class="col-sm-2 control-label">D区票数</label>
+                <div class="col-sm-10">
+                    <input type="number" name="total_tickets_D" class="form-control" id="input-total_tickets_D" min="0" placeholder="D区发票总数，若D区不发票可填0">
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button type="button" onclick="publishActivity();" class="btn btn-primary" id="publishBtn">发布</button>
                     <button type="submit" class="btn btn-default" id="saveBtn">暂存</button>

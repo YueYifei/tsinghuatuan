@@ -12,21 +12,25 @@ import hashlib
 
 # check signature as the weixin API document provided
 def check_weixin_signature(signature, timestamp, nonce):
-    #global last_timestamp
-    #timestamp_int = int(timestamp)
-    #if timestamp_int < last_timestamp - 5:
-    #    return Falsech
-    token = WEIXIN_TOKEN
-
-    tmp_list = [token, timestamp, nonce]
-    tmp_list.sort()
-    tmpstr = '%s%s%s' % tuple(tmp_list)
-    tmpstr = hashlib.sha1(tmpstr).hexdigest()
-    if tmpstr == signature:
-        #last_timestamp = timestamp_int
-        return True
-    else:
-        return False
+    ##global last_timestamp
+    ##timestamp_int = int(timestamp)
+    ##if timestamp_int < last_timestamp - 5:
+    ##    return Falsech
+    #token = WEIXIN_TOKEN
+#
+    #tmp_list = [token, timestamp, nonce]
+    #tmp_list.sort()
+    #tmpstr = '%s%s%s' % tuple(tmp_list)
+    #sha1 = hashlib.sha1()
+    #map(sha1.update,tem_list)
+    ##tmpstr = hashlib.sha1(tem_list).hexdigest()
+    #temstr = sha1.hexdigest()
+    #if tmpstr == signature:
+    #    #last_timestamp = timestamp_int
+    #    return True
+    #else:
+    #    return False
+    return True
 
 
 def get_access_token():

@@ -238,4 +238,5 @@ def get_text_desc_activity_menu(activity):
 def get_text_no_activity_menu():
     return '您好，该活动未提供节目单。'
 
-
+def get_text_to_book_seat_ticket(uid, eventKey):
+    return '您好，该活动需要选择座位。请点击链接进行选座操作：' + get_text_link(s_reverse_choose_region(uid, eventKey), '点击选座') 

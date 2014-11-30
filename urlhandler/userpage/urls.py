@@ -11,4 +11,6 @@ urlpatterns = patterns('',
                        url(r'^helpclub/$','userpage.views.helpclub_view'),
                        url(r'^helplecture/$','userpage.views.helplecture_view'),
                        url(r'^activity/(?P<actid>\d+)/menu/$', 'userpage.views.activity_menu_view'),
+                       url(r'^choose_region/(?P<uid>\S+)/(?P<eventKey>\S+)/(?P<actid>\S+)/$', 'userpage.views.choose_region_view'),
+                       url(r'^choose_region/try/$', 'userpage.views.choose_region_post'),
                        )

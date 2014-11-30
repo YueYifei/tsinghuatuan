@@ -20,9 +20,17 @@ class Activity(models.Model):
     book_end = models.DateTimeField()
     seat_status = models.IntegerField(default=0)
     total_tickets = models.IntegerField()
+    total_tickets_A = models.IntegerField()
+    total_tickets_B = models.IntegerField()
+    total_tickets_C = models.IntegerField()
+    total_tickets_D = models.IntegerField()
     status = models.IntegerField()
     pic_url = models.CharField(max_length=255)
     remain_tickets = models.IntegerField()
+    remain_tickets_A = models.IntegerField()
+    remain_tickets_B = models.IntegerField()
+    remain_tickets_C = models.IntegerField()
+    remain_tickets_D = models.IntegerField()
     menu_url = models.CharField(max_length=255, null=True)
     # Something about status:
     # -1: deleted
@@ -37,11 +45,16 @@ class Ticket(models.Model):
     unique_id = models.CharField(max_length=255)
     activity = models.ForeignKey(Activity)
     status = models.IntegerField()
-    seat = models.CharField(max_length=255)
+    area = models.CharField(max_length=255, null=True)
+    seatId = models.IntegerField(default=-1)
+    type = models.IntegerField()
     # Something about isUsed
     # 0: ticket order is cancelled
     # 1: ticket order is valid
     # 2: ticket is used
+    # Something about type:
+    # 0: no seat
+    # 1: choose seat
 
 '''
 class UserSession(models.Model):

@@ -273,7 +273,7 @@ def check_book_event(msg):
     if msg['MsgType'] == 'event' and msg['Event']=='CLICK':
         cmd_list = msg['EventKey'].split('_')
         if len(cmd_list) == 3:
-            if cmd_list[0] == 'TSINGHUA' and cmd_list[1] == 'BOOK' and cmd_list[2].isdigit():
+            if cmd_list[0] == 'TSINGHUA' and cmd_list[1] == 'BOOK' and cmd_list[2].isdigit() and cmd_list[2] < 5:
                 return True
     return False
 
@@ -381,3 +381,18 @@ def response_xnlhwh(msg):
     msg['Content'] = '节目单 新年联欢晚会'
     return response_get_activity_menu(msg)
 
+def check_book_seat_ticket(msg):
+    if msg['MsgType'] == 'event' and msg['Event']=='CLICK':
+        cmd_list = msg['EventKey'].split('_')
+        if len(cmd_list) == 3:
+            if cmd_list[0] == 'TSINGHUA' and cmd_list[1] == 'BOOK' and cmd_list[2].isdigit() and cmd_list[2] >= 5:
+                return True
+    return False
+
+def response_book_seat_ticket(msg):
+    fromuser = get_msg_from(msg)
+    user = get_user(fromuser)
+    if user is None:
+        return get_reply_text_xml(msg, get_text_to_book_seat_ticket(fromuser, msg['EventKey']))
+    else:
+        return get_reply_text_xml(msg, get_text_to_book_seat_ticket(fromuser, msg['EventKey']))

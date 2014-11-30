@@ -1,10 +1,10 @@
 #-*- coding:utf-8 -*-
 
-WEIXIN_TOKEN = 'F8ZFW1Cyzr5z6nNoJ5uZhA8iXEbe1hvX'
+WEIXIN_TOKEN = 'F8ZFW1Cyzr5z6nNoJ5uZhA8iXEbe1hvY'
 
-WEIXIN_APPID = 'wxb2545ef150be8096'
+WEIXIN_APPID = 'wx908467c39426e3bc'
 
-WEIXIN_SECRET = '8416b20564e9430bfe5a7c3fd88016f2'
+WEIXIN_SECRET = '730921e5d59ec9122eb1b350329c8869'
 
 WEIXIN_EVENT_KEYS = {
     'info_activity': 'V1001_TODAT_ACTIVE',
@@ -18,6 +18,7 @@ WEIXIN_EVENT_KEYS = {
     'ticket_no_book_recommand': 'TSINGHUA_NO_BOOK_ACTS',
     'ticket_book_header': 'TSINGHUA_BOOK_',
     'modern_figure': 'V1001_MODERN_FIGURE',
+    'book_seat_ticket': 'TSINGHUA_SEAT_TICKET_1',
 }
 
 WEIXIN_CUSTOM_MENU_TEMPLATE = {
@@ -72,12 +73,6 @@ WEIXIN_CUSTOM_MENU_TEMPLATE = {
                     "key": WEIXIN_EVENT_KEYS['ticket_get'],
                     "sub_button": []
                 },
-                #{
-                #    "type": "click",
-                #    "name": "指路",
-                #    "key": "TSINGHUA_PATH",
-                #    "sub_button": []
-                #},
                 {
                     "type": "click",
                     "name": "绑定",
@@ -88,6 +83,12 @@ WEIXIN_CUSTOM_MENU_TEMPLATE = {
                     "type": "click",
                     "name": "帮助",
                     "key": WEIXIN_EVENT_KEYS['help'],
+                    "sub_button": []
+                },
+                {
+                    "type": "click",
+                    "name": "test",
+                    "key": WEIXIN_EVENT_KEYS['book_seat_ticket'],
                     "sub_button": []
                 }
             ]

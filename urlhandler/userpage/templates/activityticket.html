@@ -20,7 +20,6 @@
 
 {% block content %}
 
-    {% include 'activityphoto.html' %}
 
     <div class="ticket-wrapper">
         <b>电子票状态：</b>
@@ -38,7 +37,12 @@
     <div class="ticket-wrapper">
         活动地点：<b>{{ act_place }}</b>
     </div>
-    {% if ticket_status > 0 %}
+    {% if act_id == 5 %}
+            <div class="ticket-wrapper">
+                说明：<span class="status-size ticket-used">本次活动需要付款并换取纸质票，请在指定日期前凭此电子票到新清华学堂售票处换取。</span>
+            </div>
+    {% endif %}
+    {% if ticket_status == 1 %}
         {% if ticket_seat == 'B' %}
             <div class="ticket-wrapper">
                 说明：<span class="status-size ticket-used">您的座位在B区 请从二楼北侧进入</span>

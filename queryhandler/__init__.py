@@ -19,15 +19,16 @@ handler_list = [
     {'check': check_no_book_acts_event,     'response': response_no_book_acts},
     {'check': check_get_activity_menu,      'response': response_get_activity_menu},
     {'check': check_xnlhwh,                 'response': response_xnlhwh},
+    {'check': check_book_seat_ticket,       'response': response_book_seat_ticket},
 ]
 
 
 # entry of weixin handler
 def handle_weixin_request(environ):
     data = urldecode(environ['QUERY_STRING'])
-    if not check_weixin_signature(data['signature'], data['timestamp'], data['nonce']):
-        print '!!!!! Check weixin signature failed !!!!!'
-        return ''
+#    if not check_weixin_signature(data['signature'], data['timestamp'], data['nonce']):
+#        print '!!!!! Check weixin signature failed !!!!!'
+#        return ''
     if environ['REQUEST_METHOD'] == 'GET':
         return data['echostr']
     elif environ['REQUEST_METHOD'] == 'POST':
@@ -39,18 +40,18 @@ def handle_weixin_request(environ):
 
         raw_str = smart_str(unicode(request_body, "utf-8"))
         msg = parse_msg_xml(ET.fromstring(raw_str))
+        #return get_reply_text_xml(msg, u'sadfadff')
         try:
-            #recognize type of message and return result
             for handler in handler_list:
                 if handler['check'](msg):
                     return handler['response'](msg)
         except Exception as e:
-            print 'Error occured!!!!!!' + str(e)
+            print 'Error occured!' + str(e)
             return get_reply_text_xml(msg, u'对不起，没有找到您需要的信息 T T')
         try:
             return get_information_response(request_body)
         except Exception as e:
-            print 'Error occured!!!!!!' + str(e)
+            print 'Error occured!' + str(e)
             return get_reply_text_xml(msg, u'对不起，没有找到您需要的信息:(')
 
 
